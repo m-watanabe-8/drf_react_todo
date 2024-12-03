@@ -102,7 +102,7 @@ const Top = () => {
         <Grid container spacing={2}>
             <Grid display="flex" justifyContent="center" size={8}>
                 <Grid size={8}>
-                    {todoList.map((todo,index) => {
+                    {todoList && todoList.map((todo,index) => {
                         return(
                             <Box mb={3} key={index}>
                                 <Card variant="outlined">
