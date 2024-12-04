@@ -5,6 +5,7 @@ from rest_framework.authtoken import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('todo.urls')),
+    path('api/v1/auth/', include('djoser.urls.jwt')),    #api/authアプリケーションのURLconf読み込み
     path('api-v1/', include('account.urls')),
     path('api-token-auth/', views.obtain_auth_token),
 ]

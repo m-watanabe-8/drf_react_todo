@@ -7,5 +7,3 @@ from rest_framework.permissions import IsAuthenticated
 class TodoViewSet(viewsets.ModelViewSet):
     queryset  = TodoModel.objects.all()
     serializer_class = TodoSerializer
-    authentication_classes = (TokenAuthentication,)
-    permission_classes = (IsAuthenticated,)

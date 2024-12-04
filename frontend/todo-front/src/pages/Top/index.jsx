@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
 import { DeleteDialog } from "../../components/DeleteDialog";
 import { InputTodo } from "../../components/InputTodo";
-import { createTodoList, deleteTodoList, getTodoList, updateTodoList } from './TodoApi';
+import { createTodoList, deleteTodoList, getTodoList, updateTodoList } from './TodoJs';
 
 const Top = () => {
 
@@ -150,7 +150,7 @@ const Top = () => {
                 <DeleteDialog
                     open={open}
                     handleClose={handleClose}
-                    deleteTodo={() => deleteTodo()}
+                    deleteTodo={deleteTodo}
                 />
             </Grid>
         </Grid>
