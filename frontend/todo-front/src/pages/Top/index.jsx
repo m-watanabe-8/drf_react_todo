@@ -1,4 +1,4 @@
-import { Select } from '@mui/material';
+import { Select, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -8,16 +8,84 @@ import Grid from '@mui/material/Grid2';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
+import { useNavigate } from "react-router-dom";
 import { DeleteDialog } from "../../components/DeleteDialog";
+import { Header } from "../../components/Header";
 import { InputTodo } from "../../components/InputTodo";
-import { createTodoList, deleteTodoList, getTodoList, updateTodoList } from './TodoJs';
 
 const Top = () => {
+    const [cookies, setCookie, removeCookie] = useCookies();
+    const navigate = useNavigate()
 
     const [todoList,setTodoList] = useState([])
     const [addTodo,setAddTodo] = useState([])
     const [delTodoId,setDelTodoId] = useState("")
     const [open, setOpen] = useState(false);
+
+    const originUrl = new URL('http://localhost:8000/api/todo/');
+
+    // データ一覧の取得
+    const getTodoList = (() => {
+        const url = new URL('/api/todo/', originUrl);
+        return new Promise( (resolve, reject) => {
+            fetch(url.href,{
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `JWT ${cookies.accesstoken}`
+                },
+            })
+            .then( res => res.status === 401 ? navigate('/login/') : res.json() )
+            .then( json => resolve(json) )
+            .catch( () => reject([]) );
+        });
+    });
+
+    // 新規作成データの登録
+    const createTodoList = ((todo) => {
+        const url = new URL('/api/todo/', originUrl);
+        return new Promise( (resolve, reject) => {
+            fetch(url.href,{
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authorization': `JWT ${cookies.accesstoken}`
+                },
+                body: JSON.stringify(todo),
+            })
+            .then( res => res.json() )
+            .then( json => resolve(json) )
+        });
+    });
+
+    // 更新
+    const updateTodoList = ((id, todo) => {
+        const url = new URL(`/api/todo/${id}/`, originUrl);
+        return new Promise( (resolve, reject) => {
+            fetch(url.href,{
+                method: "PATCH",
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `JWT ${cookies.accesstoken}`
+                },
+                body: JSON.stringify(todo),
+            })
+            .then( res => res.json() )
+            .then( json => resolve(json) )
+        });
+    });
+
+    // 削除
+    const deleteTodoList = ((id, todo) => {
+        const url = new URL(`/api/todo/${id}/`, originUrl);
+        fetch(url.href,{
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `JWT ${cookies.accesstoken}`
+            },})
+    });
+
 
     // TODO一覧の取得
     const getTodo = async () => {
@@ -99,9 +167,17 @@ const Top = () => {
 
 
     return (
-        <Grid container spacing={2}>
-            <Grid display="flex" justifyContent="center" size={8}>
-                <Grid size={8}>
+        <>
+        <Header />
+        <Grid container spacing={4}>
+            <Grid display="flex" justifyItems="center" size={12} sx={{ mx: 'auto', maxWidth: 850 }}>
+                <Grid size={7}>
+                <Typography
+                variant="h6" 
+                component="div" 
+                sx={{ mb: 1, fontFamily: 'monospace', fontWeight: 600, }}>
+                    TODOリスト
+                </Typography>
                     {todoList.length > 0 && todoList.map((todo,index) => {
                         return(
                             <Box mb={3} key={index}>
@@ -124,6 +200,7 @@ const Top = () => {
                                             id={"todo-title" + todo.id}
                                             value={todo.title} 
                                             onChange={e => changeTodo(e.target,todo.id)}
+                                            sx={{ mt: 1 }}
                                             />
                                             <TextField 
                                             label="詳細"
@@ -131,6 +208,8 @@ const Top = () => {
                                             id={"todo-content" + todo.id}
                                             value={todo.content} 
                                             onChange={e => changeTodo(e.target,todo.id)}
+                                            sx={{ mt: 2, mb: 1 }}
+
                                             />
                                         </Box>
                                         <CardActions>
@@ -142,11 +221,13 @@ const Top = () => {
                         )
                     })}
                 </Grid>
-                <InputTodo 
-                    addTodo={addTodo}
-                    onChange={e => setNewAddTodo(e.target)}
-                    onClick={createTodo}
-                />
+                <Grid size={5}>
+                    <InputTodo 
+                        addTodo={addTodo}
+                        onChange={e => setNewAddTodo(e.target)}
+                        onClick={createTodo}
+                    />
+                </Grid>
                 <DeleteDialog
                     open={open}
                     handleClose={handleClose}
@@ -154,6 +235,7 @@ const Top = () => {
                 />
             </Grid>
         </Grid>
+        </>
     )
 };
 export default Top;
