@@ -33,7 +33,7 @@ const Login = () => {
             navigate('/todo/');      // 指定したパスに遷移
         })
         .catch(err => {
-            alert("UserNameかPasswordが違います");
+            alert("ユーザー名かパスワードが違います");
         });
     };
 

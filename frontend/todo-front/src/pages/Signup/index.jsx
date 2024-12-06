@@ -15,7 +15,7 @@ const Signup = (data) => {
     const { register, handleSubmit, watch, errors } = useForm();
 
     const createUser = async (data) =>{
-        // JWTトークンを取得
+        // 新規ユーザーを作成
         await axios.post('http://localhost:8000/api/v1/user/create/',data,)
         .then(function (response) {
             navigate('/login/');
