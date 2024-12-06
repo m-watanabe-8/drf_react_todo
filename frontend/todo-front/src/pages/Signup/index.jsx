@@ -3,8 +3,11 @@ import React from 'react';
 import { useForm } from "react-hook-form";
 import { useNavigate } from 'react-router-dom';
 
-import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
 import { Header } from "../../components/Header";
 
 const Signup = (data) => {
@@ -26,18 +29,36 @@ return (
     <>
     <Header />
     <Container maxWidth="xs">
-        <Box mt={3}>
-            <h4>新規登録</h4>
-            <form onSubmit={handleSubmit(createUser)}>
-                <label htmlFor="username">UserName：</label>
-                <input className='form-control' {...register('username')} />
-                <label htmlFor="email">Email</label>
-                <input className='form-control' {...register('email')} />
-                <label htmlFor="password">PassWord：</label>
-                <input className='form-control' type="password" {...register('password', { required: true })} />
-                <input className='btn btn-secondary' type="submit" value="新規登録" />
-            </form>
-        </Box>
+        <Card sx={{ minWidth: 275 }}>
+            <CardContent>
+                <form onSubmit={handleSubmit(createUser)}>
+                    <TextField
+                        label="ユーザー名"
+                        fullWidth
+                        margin="normal"
+                        variant="standard"
+                        {...register('username')}
+                    />
+                    <TextField
+                        label="メールアドレス"
+                        fullWidth
+                        margin="normal"
+                        variant="standard"
+                        {...register('email')}
+                    />
+                    <TextField
+                        label="パスワード"
+                        fullWidth
+                        margin="normal"
+                        type="password"
+                        variant="standard"
+                        sx={{mb:3}}
+                        {...register('password', { required: true })} 
+                    />
+                    <Button variant="contained" type="submit">新規登録</Button>
+                </form>
+            </CardContent>
+        </Card>
     </Container>
     </>
 );

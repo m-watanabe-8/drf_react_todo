@@ -209,7 +209,6 @@ const Top = () => {
                                             value={todo.content} 
                                             onChange={e => changeTodo(e.target,todo.id)}
                                             sx={{ mt: 2, mb: 1 }}
-
                                             />
                                         </Box>
                                         <CardActions>

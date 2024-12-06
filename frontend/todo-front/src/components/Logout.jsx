@@ -10,8 +10,8 @@ export const Logout = () => {
     // ログアウト処理
     const handleLogout = async () =>{
         // トークンをCookieから削除
-        removeCookie('accesstoken');
-        removeCookie('refreshtoken');
+        removeCookie('accesstoken',{path:'/'});
+        removeCookie('refreshtoken',{path:'/'});
         navigate('/login/');
     }
     
